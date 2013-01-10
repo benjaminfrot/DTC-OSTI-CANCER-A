@@ -22,19 +22,19 @@ function [State,ATP,Glucose,Oxygen,Hydrogen] = InitialiseProblem(params)
 %1 = 6
 
 %Initialise by setting a layer of normal cells. The rest is empty.
-State = zeros(params.width,params.height);
+State = zeros(params.height,params.width);
 State(params.height,:) = 1; %Start with normal cells 000 + 1
 
 %All initial levels are set to one and any changes are just expressed
 %as fractions of 1.
-ATP = zeros(params.width,params.height);
+ATP = zeros(params.height,params.width);
 ATP(params.height,:) = 1;
 
-Glucose = zeros(params.width,params.height);
+Glucose = zeros(params.height,params.width);
 Glucose(params.height,:) = 1;
 
-Oxygen = zeros(params.width,params.height);
+Oxygen = zeros(params.height,params.width);
 Oxygen(params.height,:) = 1;
 
-Hydrogen = zeros(params.width,params.height);
+Hydrogen = zeros(params.height,params.width);
 Hydrogen(params.height,:) = 0;
