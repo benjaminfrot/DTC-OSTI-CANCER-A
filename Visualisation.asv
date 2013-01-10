@@ -1,8 +1,0 @@
-function [] = Visualisation(params,State,ATP,Glucose,Oxygen,Hydrogen)
-%% Creates a subplot to visualise the state of the different variables.
-% Display the State with colors.
-% Display the other continuous variables using heatmaps
-
-subplot(2,3,[1 2]);
-heatmap(State);
-sub
