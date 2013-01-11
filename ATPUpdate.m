@@ -1,4 +1,4 @@
-function [ATP] = ATPUpdate(params,Glucose,Oxygen)
+function [ATP] = ATPUpdate(params, Glucose, Oxygen, State)
 %% Update the ATP matrix with both aerobic and anaerobic processes.
 % State : A State matrix of size NxM with entries from 1 to 9
 % Glucose : A Glucose matrix of size NxM. \phi_g
@@ -6,6 +6,10 @@ function [ATP] = ATPUpdate(params,Glucose,Oxygen)
 
 % \phi_a = c + n(\phi_g -c) . But here c = C/Cx and Cx = 1.
 % Also, n = 2/params.na (paper P.711)
-tmp = Glucose - Oxygen;
-mask = tmp >= 0;
-ATP = Oxygen + 2/(params.na) * (mask .* tmp);
+mask1 = (mod(State,2) == 0) .* (State > 0);
+phiGlucose = Glucose;
+phiGlucose(mask1) = params.k * Glucose(mask1);
+tmp = phiGlucose - Oxygen;
+
+mask2 = tmp >= 0;
+ATP = Oxygen + 2/(params.na) * (mask2 .* tmp);
