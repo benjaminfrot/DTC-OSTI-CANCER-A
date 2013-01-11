@@ -16,16 +16,44 @@ function y = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
     State(1:params.height-1,:) = subsetState;
     
     % division or quiescence
-    if( State ~= 0  &&  ATP > params.a0 )
-        for i = 1:params.height
-            for j = 1:params.width
-                
-                
-                
-            end
-        end
-        
+    liveCells = State(State ~= 0);
+    mask = liveCells .* DivideStatus(params, ATP); % intersection between available cells and cells that will divide
+	[rows, cols] = find(mask);
+    
+    % wrap around the y axis
+    v = [ params.width 1:params.width 1 ];
+    function [ y ] = yW(x)
+      y = v(x + 1);
     end
+    
+    % update - reproduction step
+    for k = 1:length(rows)
+            x = rows(k);
+            y = cols(k);
+            
+            if ( x == params.height )
+                isPositionAvailable = [ (State(x-1, y)==0),  (State(x, yW(y-1))==0),  (State(x, yW(y+)1)==0) ];
+                tmpO2 = [ Oxygen(x-1, y)  Oxygen(x, yW(y-1))  Oxygen(x, yW(y+1)) ];
+                positionCell = { [x-1,y], [x, yW(y-1)], [x, yW(y+1)] };
+            elseif ( x == 1 )
+                isPositionAvailable = [ (State(x, yW(y-1))==0),  (State(x, yW(y+1))==0),  (State(x+1, y)==0) ];
+                tmpO2 = [  Oxygen(x, yW(y-1))  Oxygen(x, yW(y+1))  Oxygen(x+1, y) ];
+                positionCell = { [x, yW(y-1)], [x, yW(y+1)], [x+1, y] };                
+            else    
+                isPositionAvailable = [ (State(x-1, y)==0),  (State(x, yW(y-1))==0),  (State(x, yW(y+1))==0),  (State(x+1, y)==0) ];
+                tmpO2 = [ Oxygen(x-1, y)  Oxygen(x, yW(y-1))  Oxygen(x, yW(y+1))  Oxygen(x+1, y) ];
+                positionCell = { [x-1,y], [x, yW(y-1)], [x, yW(y+1)], [x+1, y] };
+            end
+
+            availables = find(isPositionAvailable);
+            [maxO2,maxO2Position] = max(tmp02(availables));  % index for the max oxygen of available neighbours. chooses the fisrt if there are multiple
+            newGuyPosition = positionCell{maxO2Position};
+            
+            State(newGuyPosition) = Mutate(params, State(x,y));   % update 1st daughter cell     
+            State(x,y) = Mutate(params, State(x,y));          % update 2nd daughter cell
+     
+    end
+
     
     
     
