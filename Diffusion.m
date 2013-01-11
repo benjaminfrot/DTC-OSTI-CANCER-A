@@ -17,7 +17,7 @@ M = params.height;
 
 % this is sort of a tridiagonal matrix, just with 5 diagonals
 va = -4*ones(1,N*M);
-states = reshape(State, 1, []);
+states = reshape(State', 1, []);
 
 if species == 0; % for glucose
     % glucose uptake by cells (phi_g)
