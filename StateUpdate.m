@@ -1,22 +1,19 @@
-function y = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
-    
-    % create temporary State matrix
-    tmpState = State;
+function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
     
     % death from low ATP
     State(ATP < params.a0) = 0;
     
     % death from low pH
     u = rand(params.height, params.width);
-    State( Pdeath > u ) = 0;
+    State( Pdeath(params,State,Hydrogen) > u ) = 0;
     
     % death from non-hyperplasticity
     subsetState = State(1:params.height-1,:);
-    subsetState( subsetState == 1 || subsetState == 2 || subsetState == 3 || subsetState == 4 ) = 0;
+    subsetState( subsetState == 1 + subsetState == 2 + subsetState == 3 + subsetState == 4 ) = 0;
     State(1:params.height-1,:) = subsetState;
     
     % division or quiescence
-    liveCells = State(State ~= 0);
+    liveCells = State ~= 0;
     mask = liveCells .* DivideStatus(params, ATP); % intersection between available cells and cells that will divide
 	[rows, cols] = find(mask);
     
@@ -30,9 +27,11 @@ function y = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
     for k = 1:length(rows)
             x = rows(k);
             y = cols(k);
-            
+            tmp02 = zeros(params.height,params.width);
+            isPositionAvailable = zeros(params.height,params.width);
+            positionCell = {[], [], []};
             if ( x == params.height )
-                isPositionAvailable = [ (State(x-1, y)==0),  (State(x, yW(y-1))==0),  (State(x, yW(y+)1)==0) ];
+                isPositionAvailable = [ (State(x-1, y)==0),  (State(x, yW(y-1))==0),  (State(x, yW(y+1))==0) ];
                 tmpO2 = [ Oxygen(x-1, y)  Oxygen(x, yW(y-1))  Oxygen(x, yW(y+1)) ];
                 positionCell = { [x-1,y], [x, yW(y-1)], [x, yW(y+1)] };
             elseif ( x == 1 )
@@ -46,10 +45,13 @@ function y = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
             end
 
             availables = find(isPositionAvailable);
+            if (isempty(availables))
+                return;
+            end;
             [maxO2,maxO2Position] = max(tmp02(availables));  % index for the max oxygen of available neighbours. chooses the fisrt if there are multiple
-            newGuyPosition = positionCell{maxO2Position};
+            a = positionCell{maxO2Position};
             
-            State(newGuyPosition) = Mutate(params, State(x,y));   % update 1st daughter cell     
+            State(a(1),a(2)) = Mutate(params, State(x,y));   % update 1st daughter cell     
             State(x,y) = Mutate(params, State(x,y));          % update 2nd daughter cell
      
     end

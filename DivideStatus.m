@@ -1,7 +1,8 @@
 function [ y ] = DivideStatus(params, ATP)
       % create a matrix to hold division status (1=divide) -- eqn4
     
-    mask = (ATP > params.a0) .* (ATP < 1);    
+    p = zeros(params.height, params.width);
+    mask = logical((ATP > params.a0) .* (ATP < 1));    
     p( mask ) = (ATP(mask) - params.a0) / (1 - params.a0);
     p( ATP >= 1 ) = 1;
     

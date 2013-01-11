@@ -54,7 +54,6 @@ end
 
 
 %% solving the system
-b1 = zeros(N,1);
 
 states = reshape(State, 1, []);
 % glucose uptake by cells (phi_g)
@@ -67,10 +66,10 @@ phi_g(states==0) = 0;   % vacant cells
 c = reshape(Oxygen,1,[]);
 c(states==0) = 0;
 
-b2 = c - phi_g;
-
-RHS = [b1;b2;b1];
-
+b2 = (c - phi_g)';
+b2(1:N) = 0;
+b2(end - N:end) = 0;
+RHS = b2;
 SMatrix = sparse(Matrix);
 x = SMatrix\RHS;
 
