@@ -9,7 +9,7 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
     
     % death from non-hyperplasticity
     subsetState = State(1:params.height-1,:);
-    subsetState( subsetState == 1 + subsetState == 2 + subsetState == 3 + subsetState == 4 ) = 0;
+    subsetState( logical((subsetState == 1) + (subsetState == 2) + (subsetState == 3) + (subsetState == 4))) = 0;
     State(1:params.height-1,:) = subsetState;
     
     % division or quiescence
