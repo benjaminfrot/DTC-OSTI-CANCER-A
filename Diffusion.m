@@ -1,10 +1,15 @@
-% updates the glucose level based on the cell states.
+function [updated] = Diffusion(params,State,species)
+
+% updates the concentration of diffusive species.
+% d^2 * grad^2(x) - phi_x = 0
+% the state of the cell influences uptake
+% type of diffusive species: 0 - C6H12O6; 1 - O2
 N = params.width;
 M = params.height;
 
-% We approach this by solving a system of linear equations Mg=b
+% We approach this by solving a system of linear equations Matrix * x = b
 
-%% setting up M
+%% setting up the Matrix 
 
 % We start by setting up the matrix as if we were in an infinite field
 % We will need to replace some of the entries later to account for
@@ -13,9 +18,22 @@ M = params.height;
 % this is sort of a tridiagonal matrix, just with 5 diagonals
 va = -4*ones(1,N*M);
 states = reshape(State, 1, []);
-delta = params.dg*ones(1,N*M);    %normal cells
-delta(states==2|states==4|states==6|states==8) = params.k*params.dg; % glycolytic cells
-delta(states==0) = 0;
+
+if species == 0; % for glucose
+    % glucose uptake by cells (phi_g)
+    phi_g = ones(1,N*M);    % normal cells
+    phi_g(states==2|states==4|states==6|states==8) = params.k; % glycolytic cells
+    phi_g(states==0) = 0;   % vacant cells
+    delta = params.dg*phi_g;
+end
+
+if species == 1; % for oxygen
+    % oxygen uptake c
+    c = ones(1,N*M);
+    c(states==0) = 0;
+    delta = params.dc*c;
+end
+
 va = va + delta;
 M1a = diag(va);
 vb = ones(1,N*M-1);
@@ -42,26 +60,26 @@ end
 %all cells in the right hand boundary
 for j=2:M-1
     Matrix(j*N,j*N+1)=0;
-    %rather than the one one later we want N earlier
+    %rather than the one one later we want N-1 earlier
     Matrix(j*N,(j-1)*N+1)=1;
 end
 
 %all cells in the left hand boundary
 for j=1:M-2
     Matrix(j*N+1,j*N)=0;
-    %rather than the one one earlier we want N later
+    %rather than the one one earlier we want N-1 later
     Matrix(j*N+1,(j+1)*N-1)=1;
 end
 
 
 %% solving the system
 b1 = zeros(N*(M-1),1);
-b2 = ones(N,1); % constant concentration of 1 near membrane
+b2 = ones(N,1); % constant concentration near membrane
 RHS = [b1;b2];
 
 SMatrix = sparse(Matrix);
-g = SMatrix\RHS;
+x = SMatrix\RHS;
 
-%% getting the glucose Matrix out again
-temp = reshape(g,M,N);
-Glucose = temp';
+%% getting the updated Matrix out
+temp = reshape(x,M,N);
+updated = temp';

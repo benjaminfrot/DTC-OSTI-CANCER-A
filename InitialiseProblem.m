@@ -10,11 +10,12 @@ function [State,ATP,Glucose,Oxygen,Hydrogen] = InitialiseProblem(params)
 %    params.na : Number of ATP molecules produced during complete oxydation
 %    (Eq (1) of the paper). Typically 36
 %    params.a0 : Minimum ATP for a cell to survive. Typically 0.1
-%    params.dg : 1/dg^2 where dg is the diffusion coefficient for glucose. (1.3*10^2)
+%    params.dg : 1/dg^2, where dg is the diffusion coefficient for glucose. (dg=1.3*10^2)
+%    params.dc : 1/dc^2, where dc is the diffusion coefficient for Oxygen. (dc=5)
 
 % A cell can have one of 9 states : Empty or a combination of all these
 %states : hyperplastic, acid-resitant, glycolytic. In this implementation
-% the state of the cell is described by a number between 0 and 9.
+% the state of the cell is described by a number between 0 and 8.
 % 0 : Empty
 % 1 : Normal
 % x : decimal representation of the binary number described by

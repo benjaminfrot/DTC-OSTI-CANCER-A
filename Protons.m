@@ -1,8 +1,8 @@
-function [updated] = diffusion(params,State,type)
+function [updated] = Protons(params,State, Glucose, Oxygen)
 
-% updates the concentration of diffusive species.
+% updates the concentration of protons.
 % the state of the cell influences uptake
-% type of diffusive species: 0 - C6H12O6; 1 - O2; 2 - H+
+
 N = params.width;
 M = params.height;
 
@@ -16,30 +16,6 @@ M = params.height;
 
 % this is sort of a tridiagonal matrix, just with 5 diagonals
 va = -4*ones(1,N*M);
-states = reshape(State, 1, []);
-
-% glucose uptake by cells (phi_g)
-phi_g = ones(1,N*M);    % normal cells
-phi_g(states==2|states==4|states==6|states==8) = params.k; % glycolytic cells
-phi_g(states==0) = 0;   % vacant cells
-
-% oxygen uptake c
-c = ones(1,N*M);
-c(states==0) = 0;
-
-if type == 0; % for glucose
-    delta = params.dg*phi_g;
-end
-
-if type == 1; % for oxygen
-    delta = params.dc*c;
-end
-
-if type == 2; % for protons
-    delta = c - phi_g;
-end
-    
-va = va + delta;
 M1a = diag(va);
 vb = ones(1,N*M-1);
 M1b = diag(vb,1) + diag(vb,-1);
@@ -78,12 +54,22 @@ end
 
 
 %% solving the system
-b1 = zeros(N*(M-1),1);
-b2 = ones(N,1); % constant concentration near membrane
-if type == 2;
-    b2 = zeros(N,1); % no protons near membrane
-end
-RHS = [b1;b2];
+b1 = zeros(N,1);
+
+states = reshape(State, 1, []);
+% glucose uptake by cells (phi_g)
+phi_g = reshape(Glucose,1,[]);    % normal cells
+phi_g(states==2|states==4|states==6|states==8) = ...
+    params.k*phi_g(states==2|states==4|states==6|states==8); % glycolytic cells
+phi_g(states==0) = 0;   % vacant cells
+
+% oxygen uptake c
+c = reshape(Oxygen,1,[]);
+c(states==0) = 0;
+
+b2 = c - phi_g;
+
+RHS = [b1;b2;b1];
 
 SMatrix = sparse(Matrix);
 x = SMatrix\RHS;
