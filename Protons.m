@@ -74,5 +74,5 @@ SMatrix = sparse(Matrix);
 x = SMatrix\RHS;
 
 %% getting the updated Matrix out
-temp = reshape(x,M,N);
+temp = reshape(x,N,M);
 updated = temp';

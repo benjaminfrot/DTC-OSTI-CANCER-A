@@ -11,7 +11,8 @@ phiGlucose = zeros(params.height, params.width);
 phiGlucose = Glucose;
 phiGlucose(mask1) = params.k * Glucose(mask1);
 
-tmp = phiGlucose - (Oxygen .* (State > 0));
+tmp = phiGlucose - Oxygen;
+tmp(State == 0) = 0;
 
 mask2 = tmp >= 0;
-ATP = Oxygen + 2/(params.na) * (mask2 .* tmp);
+ATP = (Oxygen .* (State ~=0)) + 2/(params.na) * (mask2 .* tmp);
