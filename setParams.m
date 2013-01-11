@@ -8,6 +8,7 @@
 %    params.na : Number of ATP molecules produced during complete oxydation
 %    (Eq (1) of the paper). Typically 36
 %    params.a0 : Minimum ATP for a cell to survive. Typically 0.1
+%    params.dg : 1/dg^2, where dg is diffusion coefficient for glucose. (1.3*10^2)
 
 params.k = 10;
 params.ht = 8600;
@@ -17,3 +18,4 @@ params.width = 50;
 params.height = 50;
 params.na = 36;
 params.a0 = 0.1;
+params.dg = 1/130^2;
