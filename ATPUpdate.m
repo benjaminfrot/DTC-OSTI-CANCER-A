@@ -7,9 +7,11 @@ function [ATP] = ATPUpdate(params, Glucose, Oxygen, State)
 % \phi_a = c + n(\phi_g -c) . But here c = C/Cx and Cx = 1.
 % Also, n = 2/params.na (paper P.711)
 mask1 = logical((mod(State,2) == 0) .* (State > 0));
+phiGlucose = zeros(params.height, params.width);
 phiGlucose = Glucose;
 phiGlucose(mask1) = params.k * Glucose(mask1);
-tmp = phiGlucose - Oxygen;
+
+tmp = phiGlucose - (Oxygen .* (State > 0));
 
 mask2 = tmp >= 0;
 ATP = Oxygen + 2/(params.na) * (mask2 .* tmp);

@@ -13,14 +13,14 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
     State(1:params.height-1,:) = subsetState;
     
     % division or quiescence
-    liveCells = State ~= 0;
+    liveCells = (State ~= 0);
     mask = liveCells .* DivideStatus(params, ATP); % intersection between available cells and cells that will divide
 	[rows, cols] = find(mask);
-    
+
     % wrap around the y axis
     v = [ params.width 1:params.width 1 ];
-    function [ y ] = yW(x)
-      y = v(x + 1);
+    function [ y ] = yW(n)
+      y = v(n + 1);
     end
     
     % update - reproduction step
@@ -50,6 +50,11 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
             end;
             [maxO2,maxO2Position] = max(tmp02(availables));  % index for the max oxygen of available neighbours. chooses the fisrt if there are multiple
             a = positionCell{maxO2Position};
+            
+            if (State(x,y) == 1)
+                 State(x,y) = Mutate(params, State(x,y));
+                 return;
+            end;
             
             State(a(1),a(2)) = Mutate(params, State(x,y));   % update 1st daughter cell     
             State(x,y) = Mutate(params, State(x,y));          % update 2nd daughter cell

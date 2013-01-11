@@ -82,5 +82,4 @@ x = SMatrix\RHS;
 
 %% getting the updated Matrix out
 temp = reshape(x,M,N);
-%temp(temp <0) = 0;
 updated = temp';
