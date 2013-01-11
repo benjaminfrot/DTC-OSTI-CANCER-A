@@ -55,15 +55,15 @@ end
 
 %% solving the system
 
-states = reshape(State, 1, []);
+states = reshape(State', 1, []);
 % glucose uptake by cells (phi_g)
-phi_g = reshape(Glucose,1,[]);    % normal cells
+phi_g = reshape(Glucose',1,[]);    % normal cells
 phi_g(states==2|states==4|states==6|states==8) = ...
     params.k*phi_g(states==2|states==4|states==6|states==8); % glycolytic cells
 phi_g(states==0) = 0;   % vacant cells
 
 % oxygen uptake c
-c = reshape(Oxygen,1,[]);
+c = reshape(Oxygen',1,[]);
 c(states==0) = 0;
 
 b2 = (c - phi_g)';
