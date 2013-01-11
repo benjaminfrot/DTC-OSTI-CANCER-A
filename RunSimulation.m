@@ -1,7 +1,7 @@
 %run simulation
 
 %Set here the number of iterations
-Niter = 20;
+Niter = 150;
 
 %Initialse the parameters with default values
 setParams;

@@ -14,7 +14,7 @@
 params.k = 10;
 params.ht = 8600;
 params.hn = 930;
-params.pa = 0.1;
+params.pa = 0.001;
 params.width = 50;
 params.height = 51;
 params.na = 36;

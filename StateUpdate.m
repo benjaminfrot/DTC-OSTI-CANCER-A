@@ -26,8 +26,8 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
     for k = 1:length(rows)
             x = rows(k);
             y = cols(k);
-            tmp02 = zeros(params.height,params.width);
-            isPositionAvailable = zeros(params.height,params.width);
+            tmpOq2 = zeros(3,1);
+            isPositionAvailable = zeros(3,1);
             positionCell = {[], [], []};
             if ( x == params.height )
                 isPositionAvailable = [ (State(x-1, y)==0),  (State(x, yW(y-1))==0),  (State(x, yW(y+1))==0) ];
@@ -47,7 +47,8 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
             if (isempty(availables))
                 continue;
             end;
-            [maxO2,maxO2Position] = max(tmp02(availables));  % index for the max oxygen of available neighbours. chooses the fisrt if there are multiple
+            tmpO2(availables)
+            [maxO2,maxO2Position] = max(tmpO2(availables));  % index for the max oxygen of available neighbours. chooses the fisrt if there are multiple
             a = positionCell{maxO2Position};
             
             if (State(x,y) == 1)
