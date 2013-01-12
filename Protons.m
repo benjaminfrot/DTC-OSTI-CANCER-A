@@ -49,7 +49,7 @@ end
 for j=1:M-2
     Matrix(j*N+1,j*N)=0;
     %rather than the one one earlier we want N-1 later
-    Matrix(j*N+1,(j+1)*N-1)=1;
+    Matrix(j*N+1,(j+1)*N)=1;
 end
 
 
@@ -68,7 +68,7 @@ c(states==0) = 0;
 
 b2 = (c - phi_g)';
 b2(1:N) = 0;
-b2(end - N:end) = 0;
+b2(end - N + 1:end) = 0;
 RHS = b2;
 SMatrix = sparse(Matrix);
 x = SMatrix\RHS;
