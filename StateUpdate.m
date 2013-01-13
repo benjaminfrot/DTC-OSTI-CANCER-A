@@ -21,9 +21,9 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
     State( Pdeath(params,State,Hydrogen) > u ) = 0;
     
     % death from non-hyperplasticity
-    subsetState = State(1:params.height-1,:);
-    subsetState(logical((subsetState == 1) + (subsetState == 2) + (subsetState == 3) + (subsetState == 4))) = 0;
-    State(1:params.height-1,:) = subsetState;
+    % FIXME: Does not work for some reason :( WHY?!! 
+    mask = logical((State == 1) + (State == 2) + (State == 3) + (State == 4));
+    State(mask(1:params.height -1,:)) = 0;
     
     % division or quiescence
     liveCells = (State ~= 0);
@@ -68,8 +68,20 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
                  continue;
             end;
             
-            State(a(1),a(2)) = Mutate(params, State(x,y));   % update 1st daughter cell     
-            State(x,y) = Mutate(params, State(x,y));          % update 2nd daughter cell
+            % cf. comment line 24....
+            m = Mutate(params,State(x,y));
+            if ((a(1) < params.height) && ((m == 1) || (m == 2) || (m == 3) || (m ==4)))
+                State(a(1),a(2)) = 0;
+            else
+                State(a(1),a(2)) = Mutate(params, State(x,y)); % update 1st daughter cell  
+            end;
+
+            m = Mutate(params, State(x,y));
+            if ((x < params.height) && ((m == 1) || (m == 2) || (m == 3) || (m ==4)))
+                State(x,y) = 0;
+            else
+                State(x,y) = Mutate(params, State(x,y));  % update 2nd daughter cell  
+            end;
      
     end
 
