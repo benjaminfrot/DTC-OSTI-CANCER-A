@@ -39,7 +39,8 @@ function [State,ATP,Glucose,Oxygen,Hydrogen] = InitialiseProblem(params)
 %Initialise by setting a layer of normal cells. The rest is empty.
 State = zeros(params.height,params.width);
 State(params.height,:) = 1; %Start with normal cells 000 + 1
-
+%State(params.height,1:10) = 8;
+%State(params.height,10:20) = 0;
 %All initial levels are set to one and any changes are just expressed
 %as fractions of 1.
 ATP = zeros(params.height,params.width);

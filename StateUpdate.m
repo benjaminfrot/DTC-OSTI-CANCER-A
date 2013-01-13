@@ -36,6 +36,10 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
     end
     
     % update - reproduction step
+    
+    IX = randperm(length(rows));
+    rows = rows(IX);
+    cols = cols(IX);
     for k = 1:length(rows)
             x = rows(k);
             y = cols(k);
@@ -60,13 +64,11 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
             if (isempty(availables))
                 continue;
             end;
-            [maxO2,maxO2Position] = max(tmpO2(availables));  % index for the max oxygen of available neighbours. chooses the fisrt if there are multiple
-            a = positionCell{maxO2Position};
-            
-            if (State(x,y) == 1)
-                 State(x,y) = Mutate(params, State(x,y));
-                 continue;
-            end;
+        
+            maxO2 = max(tmpO2(availables));  % index for the max oxygen of available neighbours. chooses one at random if there are multiple
+            indices = find(tmpO2(availables) == maxO2);
+            maxO2Position = indices(randsample(length(indices),1));
+            a = positionCell{availables(maxO2Position)};
             
             % cf. comment line 24....
             m = Mutate(params,State(x,y));

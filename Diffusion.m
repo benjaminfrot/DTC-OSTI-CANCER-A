@@ -35,7 +35,7 @@ states = reshape(State', 1, []);
 if species == 0; % for glucose
     % glucose uptake by cells (phi_g)
     phi_g = ones(1,N*M);    % normal cells
-    phi_g(states==2|states==4|states==6|states==8) = params.k; % glycolytic cells
+    phi_g(logical((states==2) + (states==4) + (states==6) + (states==8))) = params.k; % glycolytic cells
     phi_g(states==0) = 0;   % vacant cells
     delta = params.dg*phi_g;
 end

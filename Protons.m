@@ -43,11 +43,16 @@ for i=1:N
     Matrix(i, i+N ) = -1;
 end
 
+% FIXME? : Remove this condition to allow
+% Acidic resistant cells to have an advantage
+% over the other cells. Otherwise it is just 
+% impossible to go throught the basement
+%membrane
 % constant concentration at the bottom
-Matrix(N*(M-1)+1:N*M,:)=0;
-for i=1:N
-    Matrix(N*(M-1)+i,N*(M-1)+i)=1;    
-end
+%Matrix(N*(M-1)+1:N*M,:)=0;
+%for i=1:N
+%    Matrix(N*(M-1)+i,N*(M-1)+i)=1;    
+%end
 
 
 % periodic boundary conditions
@@ -71,8 +76,8 @@ end
 states = reshape(State', 1, []);
 % glucose uptake by cells (phi_g)
 phi_g = reshape(Glucose',1,[]);    % normal cells
-phi_g(states==2|states==4|states==6|states==8) = ...
-    params.k*phi_g(states==2|states==4|states==6|states==8); % glycolytic cells
+phi_g(logical((states==2) + (states==4) + (states==6) + (states==8))) = ...
+    params.k*phi_g(logical((states==2) + (states==4) + (states==6) + (states==8))); % glycolytic cells
 phi_g(states==0) = 0;   % vacant cells
 
 % oxygen uptake c

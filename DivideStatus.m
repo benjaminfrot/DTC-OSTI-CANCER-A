@@ -18,11 +18,9 @@ function [ y ] = DivideStatus(params, ATP)
     mask = logical((ATP > params.a0) .* (ATP < 1));    
     p( mask ) = (ATP(mask) - params.a0) / (1 - params.a0);
     p( ATP >= 1 ) = 1;
-    
     u = rand(params.height, params.width);
-    p( p > u ) = 1;
-    p( p < u ) = 0;
     
-    y = p;
+    %Return a matrix with ones and zeros : 1 if the cell should divide
+    y = (p > u);
     
 end
