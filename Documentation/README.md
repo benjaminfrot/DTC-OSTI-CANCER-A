@@ -29,8 +29,8 @@ Updates the ATP matrix with both aerobic and anaerobic processes based on glucos
 Pdeath.m
 Creates a matrix holding the probabilities of cell death from low pH.
 
-Pdivide.m
-Creates a matrix to hold the probabilities of cell division.
+DivideStatus.m
+Calculates the probability of survival as a function of ATP and subsequently creates a matrix with ones and zeros (1=divide).
 
 StateUpdate.m
 Updates the State matrix.
