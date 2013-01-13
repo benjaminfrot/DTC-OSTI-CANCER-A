@@ -9,7 +9,7 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
     
     % death from non-hyperplasticity
     subsetState = State(1:params.height-1,:);
-    subsetState( logical((subsetState == 1) + (subsetState == 2) + (subsetState == 3) + (subsetState == 4))) = 0;
+    subsetState(logical((subsetState == 1) + (subsetState == 2) + (subsetState == 3) + (subsetState == 4))) = 0;
     State(1:params.height-1,:) = subsetState;
     
     % division or quiescence
@@ -47,7 +47,6 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
             if (isempty(availables))
                 continue;
             end;
-            tmpO2(availables)
             [maxO2,maxO2Position] = max(tmpO2(availables));  % index for the max oxygen of available neighbours. chooses the fisrt if there are multiple
             a = positionCell{maxO2Position};
             
