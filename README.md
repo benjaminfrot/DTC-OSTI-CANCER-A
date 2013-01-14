@@ -4,6 +4,13 @@ DTC-OSTI-CANCER-A
 MATLAB implementation of "Metabolic changes during carcinogenesis: Potential impact on invasiveness."
 
 
+To run the simulation, from MATLAB:
+cd Code/
+RunSimulation
+
+To change the number of iterations, edit RunSimulaiton and change NIter.
+
+
 setParams.m
   Initialises a structure with the following parameters:
   Glycolytic rate,
