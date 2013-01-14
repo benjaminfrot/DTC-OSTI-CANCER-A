@@ -19,19 +19,23 @@ subplot(3,2,1);
 
 %Instead of simply plotting State we display only some important properties
 %of the cells:
-%Normal ; Hyperplastic ; Hyperlastic-Glycolytic ; And
+%Normal ; Hyperplastic ; Hyperlastic-Glycolytic ; and
 %Hyperlastic-Glycolytic-Acid Resistant
-%Normal : 1
-%Hyperplastic : 5 ; 7
-%Hyperplastic-Gly : 6
-%Hyperplastic-Gly-AR : 8
-%Anything else : some color
 
-epty = (State == 0);
-normal = logical((State == 1));
-hypl = logical((State == 5) + (State == 7));
-hyplgly = logical((State == 6));
-hyplglyar = logical((State == 8));
+%Empty : 0                  dark blue
+%Normal : 1                 blue
+%Hyperplastic : 5 ; 7       cyan
+%Hyperplastic-Gly : 6       yellow
+%Hyperplastic-Gly-AR : 8    orange
+%Anything else : 2 ; 3; 4   brown
+
+
+                                                % see toDisplay below
+epty = (State == 0);                            % 1
+normal = logical((State == 1));                 % 2
+hypl = logical((State == 5) + (State == 7));    % 3
+hyplgly = logical((State == 6));                % 4
+hyplglyar = logical((State == 8));              % 5
 
 toDisplay = 5*ones(params.height, params.width);
 toDisplay(epty) = 0;

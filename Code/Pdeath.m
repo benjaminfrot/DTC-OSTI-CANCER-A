@@ -12,7 +12,8 @@
 %    limitations under the License.
    
 function [ y ] = Pdeath(params,State,Hydrogen)
-        % create a matrix of 0s and 1s determining cell death from low pH (acidic) -- eqn3 in paper
+    % create a matrix of 0s and 1s determining cell death from low pH
+    % (acidic) -- equation 3 in Smallbone et al, 2007.
         
     p = zeros(params.height, params.width);
     
