@@ -1,3 +1,14 @@
+Licensing:
+The report attached to this piece of work was authored by A-team 2013, CC-BY-3.0.
+See http://creativecommons.org/licencses/by/3.0/
+
+The code attached to this piece of work was created by A-team, Copyright 2013 A-team
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this code except in compliance with the License.
+	You may obtain a copy of the License at
+	http://www.apache.org/licenses/LICENSE-2.0
+
+
 DTC-OSTI-CANCER-A
 =================
 
