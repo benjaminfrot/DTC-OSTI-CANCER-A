@@ -12,7 +12,8 @@
 %    limitations under the License.
    
 function [ y ] = DivideStatus(params, ATP)
-      % create a matrix to hold division status (1=divide) -- eqn4
+    %Creates a matrix to hold the division status of each cell (1=divide).
+    %Equation 4 on page 707, Smallbone et al. .
     
     p = zeros(params.height, params.width);
     mask = logical((ATP > params.a0) .* (ATP < 1));    
@@ -20,7 +21,8 @@ function [ y ] = DivideStatus(params, ATP)
     p( ATP >= 1 ) = 1;
     u = rand(params.height, params.width);
     
-    %Return a matrix with ones and zeros : 1 if the cell should divide
+    %Return a matrix with ones and zeros : Insert 1s if p > u and 0s when p < 0 .
+    % 1 for division, 0 for quiescence.
     y = (p > u);
     
 end
