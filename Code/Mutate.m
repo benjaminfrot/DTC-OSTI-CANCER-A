@@ -12,8 +12,8 @@
 %    limitations under the License.
    
 function [ y ] = Mutate(params, parentState)
-      % 
-      % 
+      % returns state value of cells newly created by cell division
+      % one mutation can occur randomly in each daughter cell
       % 
 
     y = parentState;
@@ -29,6 +29,7 @@ function [ y ] = Mutate(params, parentState)
     if(params.pa > u)
         bitPosition = randsample(3,1);
         binaryCoeffs(bitPosition) = mod(binaryCoeffs(bitPosition) + 1,2);
+	% convert back to decimal
         y = binaryCoeffs(1)*4 + binaryCoeffs(2)*2 + binaryCoeffs(3) + 1;
     end
     

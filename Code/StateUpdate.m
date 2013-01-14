@@ -22,15 +22,15 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
     
     % Death from non-hyperplasticity
     % FIXME: Does not work for some reason :( WHY?!!
-    % Mask returns locations of non-hyperplastic cells but
+    % Mask returns locations of non-hyperplastic cells but ...
     mask = logical((State == 1) + (State == 2) + (State == 3) + (State == 4));
-    % the followin line does not kill them, to fix this we added
+    % the following line does not kill them, to fix this we added
     % lines 74 - 86 below.
     State(mask(1:params.height -1,:)) = 0;
     
     % Establish division or quiescence
     liveCells = (State ~= 0);
-    mask = liveCells .* DivideStatus(params, ATP); % find live cells and cells that will divide
+    mask = liveCells .* DivideStatus(params, ATP); % find live cells that will divide
 	[rows, cols] = find(mask);
     % wrap around the y axis
     v = [ params.width 1:params.width 1 ];
@@ -55,7 +55,9 @@ function State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose)
             % look for oxygen concentrations surrounding cell
             % bottom row
             if ( x == params.height )
+		% look for empty space
                 isPositionAvailable = [ (State(x-1, y)==0),  (State(x, yW(y-1))==0),  (State(x, yW(y+1))==0) ];
+		% this is needed to place daughter cells in space with highest available oxygen
                 tmpO2 = [ Oxygen(x-1, y)  Oxygen(x, yW(y-1))  Oxygen(x, yW(y+1)) ];
                 positionCell = { [x-1,y], [x, yW(y-1)], [x, yW(y+1)] };
             % top row
