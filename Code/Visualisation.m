@@ -11,12 +11,11 @@
 %    See the License for the specific language governing permissions and
 %    limitations under the License.
    
-function [] = Visualisation(params,State,ATP,Glucose,Oxygen,Hydrogen)
+function textHandle = Visualisation(params,iterations,textHandle,State,ATP,Glucose,Oxygen,Hydrogen)
 %% Creates a subplot to visualise the state of the different variables.
 % Display the State with colors.
 % Display the other continuous variables using heatmaps
-
-subplot(3,2,[1 2]);
+subplot(3,2,1);
 
 %Instead of simply plotting State we display only some important properties
 %of the cells:
@@ -42,9 +41,38 @@ toDisplay(hyplgly) = 3;
 toDisplay(hyplglyar) = 4;
 
 imagesc(toDisplay,[0 5]);
-title('State Matrix')
+title('State Matrix');
+
+pos1 = 0.0125+0.05;
+inc = 0.125 ;
+%Draw the legend and #iterations
+subplot(3,2,2,'Color','none');
+axis off;
+rectangle('Position',[0,0,1,1]);
+
+text(0.1,pos1 + 0.05,'Other') 
+h = rectangle('Position',[0.02,pos1,0.05,0.1]);
+set(h,'facecolor', [0.5 0 0]);
+text(0.1,pos1 + 0.05 + inc,'Hyperplastic - Glycolytic - Acid Resistant')
+h = rectangle('Position',[0.02,pos1+inc,0.05,0.1]);
+set(h,'facecolor', [1  0.27 0]);
+text(0.1,pos1 + 0.05 + inc*2,'Hyperplastic - Glycolytic')
+h = rectangle('Position',[0.02,pos1+2*inc,0.05,0.1]);
+set(h,'facecolor', [1 1 0]);
+text(0.1,pos1 + 0.05 + inc*3,'Hyperplastic')
+h = rectangle('Position',[0.02,pos1+3*inc,0.05,0.1]);
+set(h,'facecolor', [0 1 1]);
+text(0.1,pos1 + 0.05 + inc*4,'Normal')
+h = rectangle('Position',[0.02,pos1+4*inc,0.05,0.1]);
+set(h,'facecolor', [0 0 1]);
+text(0.1,pos1 + 0.05 + inc*5,'Empty')
+h = rectangle('Position',[0.02,pos1+5*inc,0.05,0.1]);
+set(h,'facecolor', [0 0 0.5]);
+s = sprintf('Iteration # %d',iterations);
+
+textHandle = text(0.1,pos1 + 0.05 + inc*6,s);
 subplot(3,2,3);
-imagesc(ATP);
+imagesc(ATP, [0 2]);
 title('ATP Matrix');
 subplot(3,2,4);
 imagesc(Glucose);
