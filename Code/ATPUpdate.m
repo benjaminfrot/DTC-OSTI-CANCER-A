@@ -13,19 +13,29 @@
    
 function [ATP] = ATPUpdate(params, Glucose, Oxygen, State)
 %% Update the ATP matrix with both aerobic and anaerobic processes.
+
+% The following equations can be found on (Smallbone et al., Page 711)
+
 % State : A State matrix of size NxM with entries from 0 to 8
 % Glucose : A Glucose matrix of size NxM. \phi_g
 % Oxygen : A matrix of size NxM. \phi_c = C = c (because C_X = 1)
 
 % \phi_a = c + n(\phi_g -c) . But here c = C/Cx and Cx = 1.
-% Also, n = 2/params.na (paper P.711)
+% Also, n = 2/params.na
+
+% Select glycolytic cells (even state numbers).
 mask1 = logical((mod(State,2) == 0) .* (State > 0));
+
 phiGlucose = zeros(params.height, params.width);
 phiGlucose = Glucose;
 phiGlucose(mask1) = params.k * Glucose(mask1);
 
-tmp = phiGlucose - Oxygen;
-tmp(State == 0) = 0;
+phi_h = phiGlucose - Oxygen;
+phi_h(State == 0) = 0;
 
-mask2 = tmp >= 0;
-ATP = (Oxygen .* (State ~=0)) + 2/(params.na) * (mask2 .* tmp);
+mask2 = phi_h >= 0;
+
+% Implement equation 11
+% Select oxygen for all live cells and use phi_h from above to
+% update ATP production matrix.
+ATP = (Oxygen .* (State ~=0)) + 2/(params.na) * (mask2 .* phi_h);
