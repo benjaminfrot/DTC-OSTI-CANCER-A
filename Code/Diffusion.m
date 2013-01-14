@@ -81,7 +81,7 @@ end
 for j=1:M-2
     Matrix(j*N+1,j*N)=0;
     %rather than the one one earlier we want N-1 later
-    Matrix(j*N+1,(j+1)*N-1)=1;
+    Matrix(j*N+1,(j+1)*N)=1;
 end
 
 
