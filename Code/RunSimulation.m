@@ -18,10 +18,10 @@ Niter = 1000;
 
 %Initialse the parameters with default values
 setParams;
-
+screen_size = get(0, 'ScreenSize');
 %Initialise the matrices
 [State,ATP,Glucose,Oxygen,Hydrogen] = InitialiseProblem(params);
-h = figure();
+h = figure('Position', [0 0 screen_size(3) screen_size(4)]);
 textHandle = text(0,0,'');
 for i=1:Niter
     i

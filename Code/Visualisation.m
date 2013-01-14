@@ -42,6 +42,7 @@ toDisplay(hyplglyar) = 4;
 
 imagesc(toDisplay,[0 5]);
 title('State Matrix');
+colorbar;
 
 pos1 = 0.0125+0.05;
 inc = 0.125 ;
@@ -71,15 +72,26 @@ set(h,'facecolor', [0 0 0.5]);
 s = sprintf('Iteration # %d',iterations);
 
 textHandle = text(0.1,pos1 + 0.05 + inc*6,s);
+
 subplot(3,2,3);
 imagesc(ATP, [0 2]);
 title('ATP Matrix');
+colorbar;
+
 subplot(3,2,4);
 imagesc(Glucose);
 title('Glucose Matrix');
+colorbar;
+
 subplot(3,2,5);
 imagesc(Oxygen);
 title('Oxygen Matrix');
+colorbar;
+
 subplot(3,2,6);
 imagesc(Hydrogen);
 title('Hydrogen Matrix');
+colorbar;
+
+
+
