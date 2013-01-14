@@ -13,7 +13,7 @@
    
 function [ATP] = ATPUpdate(params, Glucose, Oxygen, State)
 %% Update the ATP matrix with both aerobic and anaerobic processes.
-% State : A State matrix of size NxM with entries from 1 to 9
+% State : A State matrix of size NxM with entries from 0 to 8
 % Glucose : A Glucose matrix of size NxM. \phi_g
 % Oxygen : A matrix of size NxM. \phi_c = C = c (because C_X = 1)
 
