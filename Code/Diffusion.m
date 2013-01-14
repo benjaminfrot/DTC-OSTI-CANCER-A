@@ -1,3 +1,16 @@
+% Copyright 2013 A-team
+%    Licensed under the Apache License, Version 2.0 (the "License");
+%    you may not use this file except in compliance with the License.
+%    You may obtain a copy of the License at
+% 
+%        http://www.apache.org/licenses/LICENSE-2.0
+% 
+%    Unless required by applicable law or agreed to in writing, software
+%    distributed under the License is distributed on an "AS IS" BASIS,
+%    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%    See the License for the specific language governing permissions and
+%    limitations under the License.
+   
 function [updated] = Diffusion(params,State,species)
 
 % updates the concentration of diffusive species.
@@ -17,12 +30,12 @@ M = params.height;
 
 % this is sort of a tridiagonal matrix, just with 5 diagonals
 va = -4*ones(1,N*M);
-states = reshape(State, 1, []);
+states = reshape(State', 1, []);
 
 if species == 0; % for glucose
     % glucose uptake by cells (phi_g)
     phi_g = ones(1,N*M);    % normal cells
-    phi_g(states==2|states==4|states==6|states==8) = params.k; % glycolytic cells
+    phi_g(logical((states==2) + (states==4) + (states==6) + (states==8))) = params.k; % glycolytic cells
     phi_g(states==0) = 0;   % vacant cells
     delta = params.dg*phi_g;
 end
@@ -34,7 +47,7 @@ if species == 1; % for oxygen
     delta = params.dc*c;
 end
 
-va = va + delta;
+va = va - delta;
 M1a = diag(va);
 vb = ones(1,N*M-1);
 M1b = diag(vb,1) + diag(vb,-1);
@@ -68,7 +81,7 @@ end
 for j=1:M-2
     Matrix(j*N+1,j*N)=0;
     %rather than the one one earlier we want N-1 later
-    Matrix(j*N+1,(j+1)*N-1)=1;
+    Matrix(j*N+1,(j+1)*N)=1;
 end
 
 
@@ -81,6 +94,5 @@ SMatrix = sparse(Matrix);
 x = SMatrix\RHS;
 
 %% getting the updated Matrix out
-temp = reshape(x,M,N);
-%temp(temp <0) = 0;
+temp = reshape(x,N,M);
 updated = temp';

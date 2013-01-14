@@ -1,3 +1,16 @@
+% Copyright 2013 A-team
+%    Licensed under the Apache License, Version 2.0 (the "License");
+%    you may not use this file except in compliance with the License.
+%    You may obtain a copy of the License at
+% 
+%        http://www.apache.org/licenses/LICENSE-2.0
+% 
+%    Unless required by applicable law or agreed to in writing, software
+%    distributed under the License is distributed on an "AS IS" BASIS,
+%    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%    See the License for the specific language governing permissions and
+%    limitations under the License.
+   
 function [updated] = Protons(params,State, Glucose, Oxygen)
 
 % updates the concentration of protons.
@@ -30,11 +43,16 @@ for i=1:N
     Matrix(i, i+N ) = -1;
 end
 
+% FIXME? : Remove this condition to allow
+% Acidic resistant cells to have an advantage
+% over the other cells. Otherwise it is just 
+% impossible to go throught the basement
+%membrane
 % constant concentration at the bottom
-Matrix(N*(M-1)+1:N*M,:)=0;
-for i=1:N
-    Matrix(N*(M-1)+i,N*(M-1)+i)=1;    
-end
+%Matrix(N*(M-1)+1:N*M,:)=0;
+%for i=1:N
+%    Matrix(N*(M-1)+i,N*(M-1)+i)=1;    
+%end
 
 
 % periodic boundary conditions
@@ -49,30 +67,30 @@ end
 for j=1:M-2
     Matrix(j*N+1,j*N)=0;
     %rather than the one one earlier we want N-1 later
-    Matrix(j*N+1,(j+1)*N-1)=1;
+    Matrix(j*N+1,(j+1)*N)=1;
 end
 
 
 %% solving the system
 
-states = reshape(State, 1, []);
+states = reshape(State', 1, []);
 % glucose uptake by cells (phi_g)
-phi_g = reshape(Glucose,1,[]);    % normal cells
-phi_g(states==2|states==4|states==6|states==8) = ...
-    params.k*phi_g(states==2|states==4|states==6|states==8); % glycolytic cells
+phi_g = reshape(Glucose',1,[]);    % normal cells
+phi_g(logical((states==2) + (states==4) + (states==6) + (states==8))) = ...
+    params.k*phi_g(logical((states==2) + (states==4) + (states==6) + (states==8))); % glycolytic cells
 phi_g(states==0) = 0;   % vacant cells
 
 % oxygen uptake c
-c = reshape(Oxygen,1,[]);
+c = reshape(Oxygen',1,[]);
 c(states==0) = 0;
 
 b2 = (c - phi_g)';
 b2(1:N) = 0;
-b2(end - N:end) = 0;
+b2(end - N + 1:end) = 0;
 RHS = b2;
 SMatrix = sparse(Matrix);
 x = SMatrix\RHS;
 
 %% getting the updated Matrix out
-temp = reshape(x,M,N);
+temp = reshape(x,N,M);
 updated = temp';
