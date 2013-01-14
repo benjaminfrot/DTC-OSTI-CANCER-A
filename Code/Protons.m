@@ -58,9 +58,12 @@ end
 %    Matrix(N*(M-1)+i,N*(M-1)+i)=1;    
 %end
 
+% the difference stencil is not adapted to simulate drainage into the vasculature.
+% i.e. the constant layer of 0 is moved one line below the plot.
+
 
 % periodic boundary conditions
-%all cells in the right hand boundary
+% all cells in the right hand boundary
 for j=2:M-1
     Matrix(j*N,j*N+1)=0;
     %rather than the  one later we want N-1 earlier
@@ -93,7 +96,7 @@ c(states==0) = 0;
 % creating the right hand side b of  Matrix * x = b .
 b2 = (c - phi_g)';
 b2(1:N) = 0;
-b2(end - N + 1:end) = 0;
+% b2(end - N + 1:end) = 0;
 RHS = b2;
 SMatrix = sparse(Matrix);
 x = SMatrix\RHS;

@@ -46,6 +46,7 @@ toDisplay(hyplglyar) = 4;
 subplot(3,2,1);
 imagesc(toDisplay,[0 5]);
 title('State Matrix');
+colorbar;
 
 %Draw the legend and #iterations
 pos1 = 0.0125 + 0.05;
@@ -78,15 +79,23 @@ set(h,'facecolor', [0.5 0 0]);
 
 %Titles for all other subplots
 textHandle = text(0.1,pos1 + 0.05 + inc*6,s);
+
 subplot(3,2,3);
 imagesc(ATP, [0 2]);
 title('ATP Matrix');
+colorbar;
+
 subplot(3,2,4);
 imagesc(Glucose);
 title('Glucose Matrix');
+colorbar;
+
 subplot(3,2,5);
 imagesc(Oxygen);
 title('Oxygen Matrix');
+colorbar;
+
 subplot(3,2,6);
 imagesc(Hydrogen);
 title('Hydrogen Matrix');
+colorbar;
