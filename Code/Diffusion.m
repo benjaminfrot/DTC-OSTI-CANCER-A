@@ -33,7 +33,7 @@ M = params.height;
 
 % We start by setting up the matrix as if we were in an infinite field
 % We will need to replace some of the entries later to account for
-% boundaries
+% boundaries.
 
 % this is sort of a tridiagonal matrix, just with 5 diagonals
 va = -4*ones(1,N*M);

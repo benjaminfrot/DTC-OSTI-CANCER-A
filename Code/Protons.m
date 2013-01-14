@@ -28,12 +28,16 @@ M = params.height;
 % boundaries
 
 % this is sort of a tridiagonal matrix, just with 5 diagonals
+% main diagonal
 va = -4*ones(1,N*M);
 M1a = diag(va);
+% off diagonal for left and right element of the difference stencil
 vb = ones(1,N*M-1);
 M1b = diag(vb,1) + diag(vb,-1);
+% other two diagonals for top and bottom element of the difference stencil
 vc = ones(1,N*(M-1));
 M1c = diag(vc,N) + diag(vc,-N);
+% the entire Matrix
 Matrix = M1a + M1b + M1c;
 
 % zero flux boundary condition at the top
@@ -59,7 +63,8 @@ end
 %all cells in the right hand boundary
 for j=2:M-1
     Matrix(j*N,j*N+1)=0;
-    %rather than the one one later we want N-1 earlier
+    %rather than the  one later we want N-1 earlier
+    % you need to set up Matrix yourself to make sense of this
     Matrix(j*N,(j-1)*N+1)=1;
 end
 
@@ -67,6 +72,7 @@ end
 for j=1:M-2
     Matrix(j*N+1,j*N)=0;
     %rather than the one one earlier we want N-1 later
+    % you need to set up Matrix yourself to make sense of this
     Matrix(j*N+1,(j+1)*N)=1;
 end
 
@@ -84,6 +90,7 @@ phi_g(states==0) = 0;   % vacant cells
 c = reshape(Oxygen',1,[]);
 c(states==0) = 0;
 
+% creating the right hand side b of  Matrix * x = b .
 b2 = (c - phi_g)';
 b2(1:N) = 0;
 b2(end - N + 1:end) = 0;
@@ -92,5 +99,7 @@ SMatrix = sparse(Matrix);
 x = SMatrix\RHS;
 
 %% getting the updated Matrix out
+% transforming the vector x into a matrix which can be overlayed with the
+% Cellular Automata.
 temp = reshape(x,N,M);
 updated = temp';
