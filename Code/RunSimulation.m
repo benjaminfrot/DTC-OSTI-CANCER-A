@@ -73,6 +73,7 @@ for i=1:Niter
     set(h,'Renderer','zbuffer') %Fix windows 7 transparency problem.
     M(i)=getframe(gcf); %leaving gcf out crops the frame
     end
+    %StateOutput=StateOutput';
     
     save((savename),'StateOutput','GlucoseOutput','ATPOutput','OxygenOutput','HydrogenOutput','Niter')
     
