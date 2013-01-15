@@ -24,7 +24,7 @@
 %    params.dg : 1/dg^2, where dg is diffusion coefficient for glucose. (1.3*10^2)
 %    params.dc : 1/dc^2, where dc is the diffusion coefficient for oxygen.
 
-params.k = 10;
+params.k = 50;
 params.ht = 8600;
 params.hn = 930;
 params.pa = 0.001;
