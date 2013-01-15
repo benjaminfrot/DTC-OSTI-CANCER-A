@@ -31,6 +31,7 @@ h = figure('Position', [0 0 screen_size(3) screen_size(4)]);
 textHandle = text(0,0,'');
 end
 
+StateOutput = State;
 GlucoseOutput = Glucose;
 OxygenOutput = Oxygen;
 HydrogenOutput = Hydrogen;
@@ -41,21 +42,21 @@ for i=1:Niter
     %Start each iteration with a state update : cells can die, be quiescent
     %or divide with a probability of mutating
     State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose);
-    StateOutput = [StateOutput, State];
+    StateOutput = [StateOutput; State];
     
     %Steady state diffusion of diffusive species
     Glucose = Diffusion(params,State,0);
-    GlucoseOutput = [GlucoseOutput,Glucose] ;
+    GlucoseOutput = [GlucoseOutput;Glucose] ;
     
     Oxygen = Diffusion(params,State,1);
-    OxygenOutput = [OxygenOutput,Oxygen];
+    OxygenOutput = [OxygenOutput;Oxygen];
     
     Hydrogen = Protons(params,State,Glucose,Oxygen);
-    HydrogenOutput=[HydrogenOutput, Hydrogen];
+    HydrogenOutput=[HydrogenOutput; Hydrogen];
     
     %ATP produced by live cells
     ATP = ATPUpdate(params, Glucose, Oxygen, State);
-    ATPOutput = [ATPOutput, ATP];
+    ATPOutput = [ATPOutput; ATP];
     
     %Instead of simply plotting State we display only some important properties
     %of the cells:
@@ -75,5 +76,6 @@ for i=1:Niter
     M(i)=getframe(gcf); %leaving gcf out crops the frame
     end
     
+    save('outputs.mat','StateOutput','GlucoseOutput')
 end
 

@@ -6,6 +6,7 @@ close all
 NSaves=floor(length(SavedMat)/params.height);
 
 for i=1:1:NSaves
+
     State=SavedMat((i-1)*params.height+1:(i)*params.height,:);
     epty = (State == 0);                            % 1
     normal = logical((State == 1));                 % 2
