@@ -13,6 +13,7 @@
    
 %run simulation, number of iterations, visualisation option. n=every
 %iterations, 0=no vis. 
+
 function [ y ] = RunSimulation(Niter,SeedMutation,VisEveryNIter)
 
 
@@ -77,6 +78,8 @@ for i=1:Niter
     M(i)=getframe(gcf); %leaving gcf out crops the frame
     end
     
-    save('outputs.mat','StateOutput','GlucoseOutput')
+    save('outputs.mat','StateOutput','GlucoseOutput','ATPOutput','OxygenOutput','HydrogenOutput','Niter')
+    
+    
 end
 
