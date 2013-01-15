@@ -14,11 +14,8 @@
 %run simulation
 
 %Set here the number of iterations
-Niter = 50;
-GlucoseOutput = Glucose;
-OxygenOutput = Oxygen;
-HydrogenOutput = Hydrogen;
-ATPOutput = ATPOutput;
+Niter = 100;
+
 %Initialse the parameters with default values
 setParams;
 screen_size = get(0, 'ScreenSize');
@@ -26,18 +23,25 @@ screen_size = get(0, 'ScreenSize');
 [State,ATP,Glucose,Oxygen,Hydrogen] = InitialiseProblem(params);
 h = figure('Position', [0 0 screen_size(3) screen_size(4)]);
 textHandle = text(0,0,'');
+StateOutput = State
+GlucoseOutput = Glucose;
+OxygenOutput = Oxygen;
+HydrogenOutput = Hydrogen;
+ATPOutput = ATP;
+
 for i=1:Niter
     i
     %Start each iteration with a state update : cells can die, be quiescent
     %or divide with a probability of mutating
     State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose);
+    StateOutput = [StateOutput, State];
     %Steady state diffusion of diffusive species
     Glucose = Diffusion(params,State,0);
-    GlucoseOutput = [GlucoseOutput;Glucose] ;
+    GlucoseOutput = [GlucoseOutput,Glucose] ;
     Oxygen = Diffusion(params,State,1);
-    OxygenOutput = [OxygenOutput;Oxygen];
+    OxygenOutput = [OxygenOutput,Oxygen];
     Hydrogen = Protons(params,State,Glucose,Oxygen);
-    HydrogenOutput=[HydrogenOutput; Hydrogen];
+    HydrogenOutput=[HydrogenOutput, Hydrogen];
     %ATP produced by live cells
     ATP = ATPUpdate(params, Glucose, Oxygen, State);
     ATPOutput = [ATPOutput, ATP];
@@ -54,6 +58,6 @@ for i=1:Niter
     
     delete(textHandle);
     textHandle = Visualisation(params,i,textHandle,State,ATP,Glucose,Oxygen,Hydrogen);
-    set(h,'Renderer','zbuffer') %Fix windows 7 transparency problem.
-    M(i)=getframe(gcf); %leaving gcf out crops the frame
+    %set(h,'Renderer','zbuffer') %Fix windows 7 transparency problem.
+    %M(i)=getframe(gcf); %leaving gcf out crops the frame
 end;
