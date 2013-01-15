@@ -35,6 +35,7 @@ M = params.height;
 % We will need to replace some of the entries later to account for
 % boundaries.
 
+
 % this is sort of a tridiagonal matrix, just with 5 diagonals
 va = -4*ones(1,N*M);
 states = reshape(State', 1, []); %transforms matrix into vector (like x)
@@ -46,11 +47,11 @@ if species == 0; % for glucose, see above
     phi_g = ones(1,N*M);    % normal cells
     phi_g(logical((states==2) + (states==4) + (states==6) + (states==8))) = params.k; % glycolytic cells
     phi_g(states==0) = 0;   % vacant cells
-    vec_delta = params.dg*phi_g; % refer to eqn 16 on page 712 of Smallbone et al.
+    vec_delta = params.dg*phi_g; % refer to eqn 16 on page 712 of Smallbone et al. ???
 end
 
 if species == 1; % for oxygen, see above
-    
+                                                                                                                                                                                                                                                                                                    
     % oxygen uptake c -I am sorry about this, but it is c in the paper.
     c = ones(1,N*M);
     c(states==0) = 0;
@@ -116,3 +117,5 @@ x = SMatrix\b;
 % Cellular Automata.
 temp = reshape(x,N,M);
 updated = temp';
+
+

@@ -11,23 +11,33 @@
 %    See the License for the specific language governing permissions and
 %    limitations under the License.
    
-%run simulation
+%run simulation, number of iterations, visualisation option. n=every
+%iterations, 0=no vis. 
+function [ y ] = RunSimulation(Niter,SeedMutation,VisEveryNIter)
 
-%Set here the number of iterations
-Niter = 1000;
 
 %Initialse the parameters with default values
 setParams;
 screen_size = get(0, 'ScreenSize');
 %Initialise the matrices
 [State,ATP,Glucose,Oxygen,Hydrogen] = InitialiseProblem(params);
+
+if(SeedMutation==1)
+    State(params.height,floor(params.width/2))=5;
+end
+
+if(VisEveryNIter~=0)
 h = figure('Position', [0 0 screen_size(3) screen_size(4)]);
 textHandle = text(0,0,'');
-for i=1:Niter
-    i
+end
+
+
+for i=1:Niter  
+
     %Start each iteration with a state update : cells can die, be quiescent
     %or divide with a probability of mutating
     State = StateUpdate(params, State, ATP, Oxygen, Hydrogen, Glucose);
+
     %Steady state diffusion of diffusive species
     Glucose = Diffusion(params,State,0);
     Oxygen = Diffusion(params,State,1);
@@ -45,8 +55,12 @@ for i=1:Niter
     %Anything else : 2 ; 3; 4   brown
     % empty : 0                 dark blue
     
+    if(mod(i,VisEveryNIter)==0)
     delete(textHandle);
     textHandle = Visualisation(params,i,textHandle,State,ATP,Glucose,Oxygen,Hydrogen);
     set(h,'Renderer','zbuffer') %Fix windows 7 transparency problem.
     M(i)=getframe(gcf); %leaving gcf out crops the frame
-end;
+    end
+    
+end
+

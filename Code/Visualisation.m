@@ -89,13 +89,16 @@ subplot(3,2,4);
 imagesc(Glucose);
 title('Glucose Matrix');
 colorbar;
+caxis([0.95,1]);
 
 subplot(3,2,5);
 imagesc(Oxygen);
 title('Oxygen Matrix');
 colorbar;
+caxis([0.2,1]);
 
 subplot(3,2,6);
 imagesc(Hydrogen);
 title('Hydrogen Matrix');
 colorbar;
+caxis([0,500]);
