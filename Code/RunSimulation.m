@@ -13,12 +13,8 @@
    
 %run simulation, number of iterations, visualisation option. n=every
 %iterations, 0=no vis. 
-function [ y ] = RunSimulation(Niter,SeedMutation,VisEveryNIter)
+function [ y ] = RunSimulation(Niter,SeedMutation,VisEveryNIter,params,savename)
 
-
-%Initialse the parameters with default values
-setParams;
-screen_size = get(0, 'ScreenSize');
 %Initialise the matrices
 [State,ATP,Glucose,Oxygen,Hydrogen] = InitialiseProblem(params);
 
@@ -27,8 +23,9 @@ if(SeedMutation==1)
 end
 
 if(VisEveryNIter~=0)
-h = figure('Position', [0 0 screen_size(3) screen_size(4)]);
-textHandle = text(0,0,'');
+    screen_size = get(0, 'ScreenSize');
+    h = figure('Position', [0 0 screen_size(3) screen_size(4)]);
+    textHandle = text(0,0,'');
 end
 
 StateOutput = State;
@@ -76,6 +73,6 @@ for i=1:Niter
     M(i)=getframe(gcf); %leaving gcf out crops the frame
     end
     
-    save('outputs.mat','StateOutput','GlucoseOutput')
+    save((savename),'StateOutput','GlucoseOutput','OxygenOutput','HydrogenOutput','ATPOutput')
 end
 

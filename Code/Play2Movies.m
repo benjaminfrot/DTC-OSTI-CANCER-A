@@ -10,9 +10,10 @@ frames1=info1.NumFrames;
 frames2=info2.NumFrames;
 runTime=max(frames1,frames2);
 
-f=figure;
-a1=axes('parent',f,'position',[0.1,0.1,0.4,0.6]);
-a2=axes('parent',f,'position',[0.55,0.1,0.4,0.6]);
+scrsz = get(0,'ScreenSize');
+f=figure('Position',[0 0 scrsz(3)/2 scrsz(4)/2]);
+a1=axes('parent',f,'position',[0,0.1,0.6,0.6]);
+a2=axes('parent',f,'position',[0.45,0.1,0.6,0.6]);
 for i=1:runTime
     if i<=frames1
         imshow(video1(i).cdata,'parent',a1);
