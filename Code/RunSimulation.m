@@ -36,6 +36,7 @@ GlucoseOutput = Glucose;
 OxygenOutput = Oxygen;
 HydrogenOutput = Hydrogen;
 ATPOutput = ATP;
+StateOutput = State;
 
 for i=1:Niter  
 
